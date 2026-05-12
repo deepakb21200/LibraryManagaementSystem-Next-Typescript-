@@ -1,11 +1,16 @@
 "use client"
 import { useMutation } from "@tanstack/react-query";
 import type { BookFields } from "../../../types/type"
-import BookForm from "../../../utils/BookForm"
+ 
 import { addBook } from "../../../api/booksApi";
 import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
-
+import BookForm from "@/components/other/BookForm";
+import { FormSchema } from "@/types/types";
+ 
+export interface AddBookPayload extends FormSchema {
+  image: File | null;   // string wala image yahan nahi aata
+}
 
 
 function AddBook() {
@@ -42,11 +47,11 @@ function AddBook() {
 
 
   return (
-    <div>
-      <h2 className="my-3 text-center text-3xl">Add Book</h2>
+    <>
+      
       <BookForm  handleFormSubmit={handleFormSubmit} isPending={isPending}
       />
-    </div>
+    </>
   )
 }
 

@@ -1,8 +1,13 @@
-import React from 'react'
+import AddStudent from "./AddStudent"
+
+ 
+
 
 const page = () => {
   return (
-    <div>addStudent</div>
+    <>
+    <AddStudent/>
+    </>
   )
 }
 

@@ -1,12 +1,8 @@
 import React from 'react'
-import StudentsList from './StudentList'
- 
 
 function page() {
   return (
-    <>
-    <StudentsList/>
-    </>
+    <div>page</div>
   )
 }
 

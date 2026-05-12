@@ -1,8 +1,11 @@
 import React from 'react'
+import IssueBook from './IssueBook'
 
 function page() {
   return (
-    <div>IssueBook</div>
+    <>
+    <IssueBook/>
+    </>
   )
 }
 

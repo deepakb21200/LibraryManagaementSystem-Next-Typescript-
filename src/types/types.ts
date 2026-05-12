@@ -11,22 +11,7 @@ export const formSchema = z.object({
 export type FormSchema = z.infer<typeof formSchema>
 
 
-
-export interface BookFields{
-  name:string
-  author:string
-  publisher:string
-  isbn:string
+// ✅ BookFields = sirf DB fields (image URL string)
+export interface BookFields extends FormSchema {
+  image?: string;
 }
-
-
-// export interface BookFields {
-//   name: string
-//   author: string
-//   publisher: string
-//   isbn: string
-// }
-
-// export interface BookFieldsArray {
-//   books: BookFields[]
-// }

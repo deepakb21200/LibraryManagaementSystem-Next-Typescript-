@@ -1,10 +1,10 @@
-import React from 'react'
-import Chart from './Chart'
+
+import ResetPassword from './resetPassword'
 
 function page() {
   return (
     <>
-    <Chart />
+    <ResetPassword/>
     </>
   )
 }

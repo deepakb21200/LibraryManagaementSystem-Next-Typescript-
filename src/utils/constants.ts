@@ -40,3 +40,26 @@ export const menuItems = [
   },
 
 ];
+
+
+
+export const MAX_FILE_UPLOAD_SIZE = 1; // 1MB
+
+
+
+
+export const MONTHS = [
+  "Jan",
+  "Feb",
+  "Mar",
+  "Apr",
+  "May",
+  "Jun",
+  "Jul",
+  "Aug",
+  "Sep",
+  "Oct",
+  "Nov",
+  "Dec",
+];
+

@@ -1,11 +1,10 @@
 import React from 'react'
-import StudentsList from './StudentList'
- 
+import EditBook from './EditBook'
 
 function page() {
   return (
     <>
-    <StudentsList/>
+    <EditBook/>
     </>
   )
 }

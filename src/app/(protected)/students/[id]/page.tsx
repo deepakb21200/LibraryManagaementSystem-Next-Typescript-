@@ -1,0 +1,14 @@
+import EditStudent from "../../editStudent/EditStudent";
+
+ 
+ 
+
+async function Page({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
+
+  console.log(id);
+
+  return <EditStudent id={id}/>
+}
+
+export default Page;

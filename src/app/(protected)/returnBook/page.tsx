@@ -1,8 +1,11 @@
+import ReturnBook from '@/components/other/ReturnBook'
 import React from 'react'
 
 function page() {
   return (
-    <div>ReturnBook</div>
+   <>
+   <ReturnBook/>
+   </>
   )
 }
 
