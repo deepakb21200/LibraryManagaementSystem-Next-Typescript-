@@ -36,17 +36,17 @@ export default function AuthLayout({
 }) {
   const { isAuthenticated, isPending } = useUser();
 
-  if (isPending) {
-    return (
-      <p className="text-center text-3xl my-2 tracking-wider">
-        Loading...
-      </p>
-    );
-  }
+  // if (isPending) {
+  //   return (
+  //     <p className="text-center text-3xl my-2 tracking-wider">
+  //       Loading...
+  //     </p>
+  //   );
+  // }
 
-  if (isAuthenticated) {
-    redirect("/dashboard");
-  }
+  // if (isAuthenticated) {
+  //   redirect("/dashboard");
+  // }
 
   return (
     <>

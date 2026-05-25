@@ -57,7 +57,7 @@ const ResetPasswordScreen = () => {
 
   return (
     // <div className=" px-4 py-6 sm:px-6 flex items-center justify-center ">
-        <div className="">
+    <div className="">
       <div className="w-full max-w-4xl bg-white border border-emerald-100 rounded-[32px] overflow-hidden shadow-2xl">
 
         <div className="grid lg:grid-cols-[420px_1fr]">
@@ -133,8 +133,8 @@ const ResetPasswordScreen = () => {
                   placeholder="Enter new password"
                   {...register("password")}
                   className={`w-full h-13 rounded-2xl border bg-gray-50 px-4 text-sm outline-none transition-all ${errors.password
-                      ? "border-red-300 focus:border-red-400"
-                      : "border-gray-200 focus:border-emerald-400 focus:bg-white"
+                    ? "border-red-300 focus:border-red-400"
+                    : "border-gray-200 focus:border-emerald-400 focus:bg-white"
                     }`}
                 />
 
