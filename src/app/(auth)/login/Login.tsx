@@ -29,7 +29,7 @@ const Login = () => {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm();
+  } = useForm<LoginForm>();
 
   const { isPending, mutate } =
     useMutation({
@@ -46,7 +46,7 @@ const Login = () => {
       },
     });
 
-const onSubmit = (data: LoginForm) => {
+const onSubmit = (data:LoginForm) => {
     mutate(data);
   };
 
@@ -146,9 +146,7 @@ const onSubmit = (data: LoginForm) => {
           {/* FORM */}
           <form
             className="space-y-5"
-            onSubmit={handleSubmit(
-              onSubmit
-            )}
+            onSubmit={handleSubmit(onSubmit)}
           >
 
             {/* EMAIL */}
