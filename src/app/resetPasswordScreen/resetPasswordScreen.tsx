@@ -14,6 +14,10 @@ const formSchema = z.object({
     .refine((v) => v.trim() !== "", "This is a required field."),
 });
 
+
+type ResetPasswordForm =
+  z.infer<typeof formSchema>;
+
 const ResetPasswordScreen = () => {
   const router = useRouter()
 
@@ -22,12 +26,14 @@ const ResetPasswordScreen = () => {
     handleSubmit,
     reset,
     formState: { errors },
-  } = useForm({
+  } = useForm<ResetPasswordForm>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       password: "",
     },
   });
+
+
 
   const { isPending, mutate } = useMutation({
     mutationKey: ["updatePassword"],
@@ -51,7 +57,7 @@ const ResetPasswordScreen = () => {
 
 
 
-  function onSubmit(values) {
+  function onSubmit(values: ResetPasswordForm) {
     mutate(values.password);
   }
 

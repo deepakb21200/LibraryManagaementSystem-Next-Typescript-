@@ -1,6 +1,33 @@
 "use client"
 
-export  function StudentTable({ student }) {
+
+type Student = {
+  first_name: string;
+
+  middle_name?: string | null;
+
+  last_name: string;
+
+  address: string;
+
+  state: string;
+
+  city: string;
+
+  class: string;
+
+  pincode: string | number;
+
+  phone: string | number;
+};
+
+type StudentTableProps = {
+  student: Student;
+};
+
+export function StudentTable({
+  student,
+}: StudentTableProps) {
   const {
     first_name,
     middle_name,

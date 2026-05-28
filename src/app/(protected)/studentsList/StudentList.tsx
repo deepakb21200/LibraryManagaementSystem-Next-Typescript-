@@ -410,7 +410,7 @@ function StudentsList() {
 
   const toggleOpen = () => setOpen(!open);
 
-  const [studentName, setStudentName] = useState(null);
+  const [studentName, setStudentName] = useState("");
 
 const router = useRouter();
   const queryClient = useQueryClient();
@@ -639,7 +639,8 @@ const router = useRouter();
       </div>
 
       {/* Dialog */}
-      {books?.length > 0 && (
+      {/* {books?.length > 0 && ( */}
+       {books && books.length > 0 && (
         <BooksDialog
           books={books}
           open={open}

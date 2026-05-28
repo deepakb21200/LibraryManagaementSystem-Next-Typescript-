@@ -95,9 +95,43 @@ import { getBooksByStudentId } from "@/api/booksApi";
 import { StudentTable } from "./StudentTable";
 import { BooksDialog } from "./BooksDialog";
 
-const StudentDialog = ({ open, onOpenChange, student }) => {
+
+
+
+// 👇 Student type
+interface Student {
+  id: string;
+  first_name: string;
+  middle_name?: string;
+  last_name: string;
+  class: string;
+  address: string;
+  city: string;
+  phone: string;
+
+
+  //temporay basis check karne ki likhana hi ki nhi 
+  state: string;
+pincode: string | number;
+}
+
+// 👇 Props type
+interface StudentDialogProps {
+  open: boolean;
+  onOpenChange: (value: boolean) => void;
+  student?: Student;
+}
+
+const StudentDialog = ({
+  open,
+  onOpenChange,
+  student,
+}: StudentDialogProps) => {
   const [isBookOpen, setIsBookOpen] = useState(false);
   const toggleOpen = () => setIsBookOpen(!isBookOpen);
+
+  console.log("stu", student);
+  
 
   const [isMounted, setIsMounted] = useState(open);
 
@@ -160,6 +194,8 @@ const StudentDialog = ({ open, onOpenChange, student }) => {
           type="button"
           className="block w-full text-center text-lg text-blue-600 mt-4 underline cursor-pointer"
           onClick={() => {
+              if (!student) return;
+
             mutate(student?.id, {
               onSuccess: toggleOpen,
             });
@@ -178,7 +214,8 @@ const StudentDialog = ({ open, onOpenChange, student }) => {
           open={isBookOpen}
           onOpenChange={toggleOpen}
           studentName={student?.first_name}
-          books={books}
+          // books={books}
+            books={books || []}
         />
       </div>
     </div>

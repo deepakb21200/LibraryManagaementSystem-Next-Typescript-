@@ -5,7 +5,7 @@ async function Page({ params }: { params: Promise<{ id: string }> }) {
 
   console.log(id);
 
-  return <EditBook id={id}/>
+  return <EditBook />
 }
 
 export default Page;

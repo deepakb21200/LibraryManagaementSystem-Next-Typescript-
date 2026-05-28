@@ -18,7 +18,7 @@ import {
 import { toast } from "sonner";
 import { sendResetPasswordEmail } from "@/api/auth";
 
- 
+
 const formSchema = z.object({
   email: z.string().email({
     message:
@@ -71,19 +71,19 @@ const ResetPassword = () => {
       toast(`❌ ${error.message}`),
   });
 
-  function onSubmit(values) {
+  function onSubmit(values: ResetPasswordForm) {
     resetPassword(values.email);
   }
 
   return (
     // <section className=" p-4 flex items-center justify-center">
-      <section className=" ">
-      
+    <section className=" ">
+
       <div className="w-full max-w-4xl bg-white rounded-[32px] overflow-hidden border border-gray-200 shadow-sm grid lg:grid-cols-2">
-        
+
         {/* LEFT SIDE */}
         <div className="hidden lg:flex flex-col justify-between bg-emerald-600 p-10 text-white relative overflow-hidden">
-          
+
           <div className="absolute top-0 right-0 w-72 h-72 bg-white/10 rounded-full blur-3xl" />
 
           <div>
@@ -93,9 +93,9 @@ const ResetPassword = () => {
 
             <h2 className="text-4xl font-bold leading-tight">
               Reset
-             
+
               Your
-            
+
               Password
             </h2>
 
@@ -116,10 +116,10 @@ const ResetPassword = () => {
 
         {/* RIGHT SIDE */}
         <div className="p-6 sm:p-10 lg:p-12 flex flex-col justify-center">
-          
+
           {/* MOBILE HEADER */}
           <div className="lg:hidden flex items-center gap-3 mb-8">
-            
+
             <div className="w-12 h-12 rounded-2xl bg-emerald-600 flex items-center justify-center">
               <MdMenuBook className="text-white text-2xl" />
             </div>
@@ -154,7 +154,7 @@ const ResetPassword = () => {
             )}
             className="space-y-5"
           >
-            
+
             {/* EMAIL */}
             <div>
               <label className="text-sm font-medium text-gray-700 mb-2 block">
@@ -162,17 +162,16 @@ const ResetPassword = () => {
               </label>
 
               <div className="relative">
-                
+
                 <MdEmail className="absolute left-4 top-1/2 -translate-y-1/2 text-xl text-gray-400" />
 
                 <input
                   type="email"
                   placeholder="Enter your email"
-                  className={`w-full h-12 rounded-xl border bg-gray-50 pl-12 pr-4 text-sm outline-none transition-all ${
-                    errors.email
+                  className={`w-full h-12 rounded-xl border bg-gray-50 pl-12 pr-4 text-sm outline-none transition-all ${errors.email
                       ? "border-red-300"
                       : "border-gray-200 focus:border-emerald-400 focus:bg-white"
-                  }`}
+                    }`}
                   {...register(
                     "email"
                   )}

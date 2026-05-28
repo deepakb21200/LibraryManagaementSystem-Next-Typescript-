@@ -1,8 +1,11 @@
 import { getFormattedDate } from "@/utils/functions";
+import { Book } from "./BookForm";
 
- 
+ interface BooksTableProps {
+  books: Book[];
+}
 
-export  const  BooksTable = ({ books }) => {
+export const BooksTable = ({ books }: BooksTableProps) => {
   return (
     <div className="overflow-x-auto rounded-xl border border-gray-300">
       <table className="w-full text-sm text-center border-collapse">
