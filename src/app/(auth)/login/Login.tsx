@@ -16,6 +16,10 @@ import {
 import { toast } from "sonner";
 import { login } from "@/api/auth";
 
+interface LoginForm {
+  email: string;
+  password: string;
+}
 
 
 const Login = () => {
@@ -42,7 +46,7 @@ const Login = () => {
       },
     });
 
-  const onSubmit = (data) => {
+const onSubmit = (data: LoginForm) => {
     mutate(data);
   };
 
