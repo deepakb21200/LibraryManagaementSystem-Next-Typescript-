@@ -1,61 +1,110 @@
-"use client"
-import { useMutation } from "@tanstack/react-query";
-import type { BookFields } from "../../../types/type"
- 
-import { addBook } from "../../../api/booksApi";
-import { toast } from "sonner";
-import { useNavigate } from "react-router-dom";
-import BookForm from "@/components/other/BookForm";
-import { FormSchema } from "@/types/types";
- 
-export interface AddBookPayload extends FormSchema {
-  image: File | null;   // string wala image yahan nahi aata
-}
 
+
+// "use client";
+
+// import { useMutation, useQueryClient } from "@tanstack/react-query";
+// import { useRouter } from "next/navigation";
+// import { toast } from "sonner";
+// import BookForm, { AddBookPayload, EditBookPayload } from "@/components/other/BookForm";
+// import { addBook } from "@/api/booksApi";
+
+
+
+// export type HandleFormSubmitAdd = (values: AddBookPayload) => Promise<boolean>;
+
+// export type HandleFormSubmitEdit = (values: EditBookPayload) => Promise<boolean>;
+
+
+
+
+// function AddBook() {
+//   const queryClient = useQueryClient();
+//   const router = useRouter();
+
+//   const { isPending, mutateAsync } = useMutation({
+//     mutationKey: ["addBook"],
+//     mutationFn: addBook,
+//     onSuccess: () => {
+//       toast("✅ Book is added successfully.");
+//       queryClient.invalidateQueries({ queryKey: ["books"] });
+//       setTimeout(() => router.push("/dashboard"), 1000);
+//     },
+//     onError: (error: Error) => toast(`❌ ${error?.message}`),
+//   });
+
+
+
+//   const handleFormSubmit: HandleFormSubmitAdd = async (values) => {
+//     try {
+//       await mutateAsync(values);
+//       return true;
+//     } catch (error) {
+//       console.log(error);
+//       return false;
+//     }
+//   };
+//   return <BookForm handleFormSubmit={handleFormSubmit} isPending={isPending} />;
+// }
+
+// export default AddBook;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+"use client";
+
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
+import BookForm, { AddBookPayload, EditBookPayload } from "@/components/other/BookForm";
+import { addBook } from "@/api/booksApi"
+
+export type HandleFormSubmitAdd = (values: AddBookPayload) => Promise<boolean>;
+export type HandleFormSubmitEdit = (values: EditBookPayload) => Promise<boolean>;
 
 function AddBook() {
-  // let navigate = useNavigate()
+  const queryClient = useQueryClient();
+  const router = useRouter();
 
   const { isPending, mutateAsync } = useMutation({
     mutationKey: ["addBook"],
     mutationFn: addBook,
     onSuccess: () => {
       toast("✅ Book is added successfully.");
-      // QueryClient.invalidateQueries({
-      //   queryKey: ["books"],
-      // });
-      // setTimeout(() => {
-      //   navigate("/dashboard");
-      // }, 1000);
+      queryClient.invalidateQueries({ queryKey: ["books"] });
+      setTimeout(() => router.push("/dashboard"), 1000);
     },
-    onError: (error) => toast(`❌ ${error?.message}`),
-  })
+    onError: (error: Error) => toast(`❌ ${error?.message}`),
+  });
 
-
-
-
-  async function handleFormSubmit(book: BookFields): Promise<boolean> {
+  const handleFormSubmit = async (values: AddBookPayload): Promise<boolean> => {
     try {
-     await mutateAsync(book)
-      return true
+      await mutateAsync(values);
+      return true;
     } catch (error) {
       console.log(error);
-
-      return false
+      return false;
     }
-  }
+  };
 
-
-  return (
-    <>
-      
-      <BookForm  handleFormSubmit={handleFormSubmit} isPending={isPending}
-      />
-    </>
-  )
+  return <BookForm handleFormSubmit={handleFormSubmit} isPending={isPending} />;
 }
 
-export default AddBook
+export default AddBook;
+
+
+
+
 
 
 
@@ -69,3 +118,4 @@ export default AddBook
 //Julia Donaldson
 //Puffin Books
 //9780142501122
+

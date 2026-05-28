@@ -1,13 +1,36 @@
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+import { EditPayload } from "@/components/other/StudentForm";
 import { createClient } from "@/lib/supabase";
 
- 
- 
- 
- 
 
 
-export const issueBook = async ({ book_id, student_id }) => {
-            const supabase= createClient()
+export const issueBook = async ({ book_id, student_id }: { book_id: string; student_id: string }) => {
+  const supabase = createClient()
   const { data, error } = await supabase
     .from("student_books")
     .insert([{ book_id, student_id }])
@@ -22,8 +45,8 @@ export const issueBook = async ({ book_id, student_id }) => {
 };
 
 
-export const updateStudent = async ({ id, student }) => {
-              const supabase= createClient()
+export const updateStudent = async ({ id, student } :EditPayload) => {
+  const supabase = createClient()
   const { data, error } = await supabase
     .from("students")
     .update(student)
@@ -39,8 +62,8 @@ export const updateStudent = async ({ id, student }) => {
 };
 
 
-export const returnBook = async ({ book_id }) => {
-             const supabase= createClient()
+export const returnBook = async ({ book_id }: { book_id: string }) => {
+  const supabase = createClient()
   const { error, data } = await supabase
     .from("student_books")
     .delete()
@@ -62,19 +85,19 @@ export const returnBook = async ({ book_id }) => {
 
 
 export const getAnalyticsByStudentId = async ({ studentId, date }: { studentId: string; date: { from: Date; to: Date } }) => {
-   const supabase= createClient()
-  const {  data, error, } = await supabase
+  const supabase = createClient()
+  const { data, error, } = await supabase
     .from("student_books")
     .select("book_id")
     .eq("student_id", studentId)
     .gte("created_at", date.from.toISOString())
     .lte("created_at", date.to.toISOString())
 
-    console.log(data);
+  // console.log(data);
 
-    console.log(date.from.toISOString());
-console.log(date.to.toISOString());
-    
+  // console.log(date.from.toISOString());
+  // console.log(date.to.toISOString());
+
 
   if (error) {
     console.log(error);
@@ -92,8 +115,8 @@ console.log(date.to.toISOString());
     .select("*, student_books(created_at)")
     .in("id", bookIds);
 
-    console.log(books);
-    
+  // console.log(books);
+
 
   if (booksError) {
     console.log(booksError);

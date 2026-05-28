@@ -1,6 +1,8 @@
+
+
 import { MAX_FILE_UPLOAD_SIZE } from "./constants";
 
-export const getFormattedDate = (date) => {
+export const getFormattedDate = (date:string) => {
   return new Date(date).toLocaleDateString("en-US", {
     year: "numeric",
     month: "short",

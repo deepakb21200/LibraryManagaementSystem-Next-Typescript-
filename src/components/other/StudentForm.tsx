@@ -3,111 +3,49 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import {
-  MdLocationOn,
-  MdPerson,
-  MdPhone,
-  MdSchool,
-} from "react-icons/md";
+import { MdLocationOn, MdPerson, MdPhone, MdSchool, } from "react-icons/md";
 
 /* ---------------- SCHEMA ---------------- */
 
 const formSchema = z.object({
-  first_name: z
-    .string()
-    .refine(
-      (v) => v.trim() !== "",
-      "This is a required field."
-    ),
+  first_name: z.string().refine((v) => v.trim() !== "", "This is a required field."),
 
   middle_name: z.string().optional(),
 
-  last_name: z
-    .string()
-    .refine(
-      (v) => v.trim() !== "",
-      "This is a required field."
-    ),
+  last_name: z.string().refine((v) => v.trim() !== "", "This is a required field."),
 
-  class: z
-    .string()
-    .refine(
-      (v) => v.trim() !== "",
-      "This is a required field."
-    ),
+  class: z.string().refine((v) => v.trim() !== "", "This is a required field."),
 
-  address: z
-    .string()
-    .refine(
-      (v) => v.trim() !== "",
-      "This is a required field."
-    ),
+  address: z.string().refine((v) => v.trim() !== "", "This is a required field."),
 
-  state: z
-    .string()
-    .refine(
-      (v) => v.trim() !== "",
-      "This is a required field."
-    ),
+  state: z.string().refine((v) => v.trim() !== "", "This is a required field."),
 
-  city: z
-    .string()
-    .refine(
-      (v) => v.trim() !== "",
-      "This is a required field."
-    ),
+  city: z.string().refine((v) => v.trim() !== "", "This is a required field."),
 
-  pincode: z
-    .string()
-    .refine(
-      (v) => v.trim() !== "",
-      "This is a required field."
-    ),
+  pincode: z.string().refine((v) => v.trim() !== "", "This is a required field."),
 
-  phone: z
-    .string()
-    .refine(
-      (v) => v.trim() !== "",
-      "This is a required field."
-    )
-    .refine(
-      (v) => v.trim().length === 10,
-      "Please enter a valid 10-digit number"
-    ),
+  phone: z.string().refine((v) => v.trim() !== "", "This is a required field.").refine((v) => v.trim().length === 10,
+    "Please enter a valid 10-digit number")
 });
 
-export type FormValues = z.infer<
-  typeof formSchema
->;
+export type FormValues = z.infer<typeof formSchema>;
 
-export interface Student
-  extends FormValues {
+export interface Student extends FormValues {
   id: string;
 }
 
-export interface UpdateStudentPayload {
+export type EditPayload = {
   id: string;
   student: FormValues;
-}
+};
 
-export type AddSubmitHandler = (
-  student: FormValues
-) => Promise<boolean>;
+export type HandleSubmit = (values: FormValues | EditPayload) => Promise<boolean>;
 
-export type EditSubmitHandler = (
-  payload: UpdateStudentPayload
-) => Promise<boolean>;
-
-export interface StudentFormProps {
-  handleFormSubmit:
-    | AddSubmitHandler
-    | EditSubmitHandler;
-
+interface StudentFormProps {
+  handleFormSubmit: HandleSubmit;
   student?: Student;
-
   isPending: boolean;
 }
-
 const StudentForm = ({
   handleFormSubmit,
   student,
@@ -117,7 +55,6 @@ const StudentForm = ({
     register,
     handleSubmit,
     reset,
-
     formState: { errors },
   } = useForm<FormValues>({
     resolver: zodResolver(formSchema),
@@ -148,21 +85,14 @@ const StudentForm = ({
     },
   });
 
-  async function onSubmit(
-    values: FormValues
-  ) {
-    if (student) {
-      await (
-        handleFormSubmit as EditSubmitHandler
-      )({
-        id: student.id,
-        student: values,
-      });
-    } else {
-      const isSuccess = await (
-        handleFormSubmit as AddSubmitHandler
-      )(values);
 
+  async function onSubmit(values: FormValues) {
+    if (student) {
+      // edit
+      await handleFormSubmit({ id: student.id, student: values });
+    } else {
+      // add
+      const isSuccess = await handleFormSubmit(values);
       if (isSuccess) {
         reset();
       }
@@ -183,9 +113,7 @@ const StudentForm = ({
 
               <div>
                 <h2 className="text-xl font-semibold text-gray-800">
-                  {student
-                    ? "Update Student"
-                    : "Add New Student"}
+                  {student ? "Update Student" : "Add New Student"}
                 </h2>
 
                 <p className="text-sm text-gray-400 mt-1">
@@ -208,8 +136,7 @@ const StudentForm = ({
                     </p>
 
                     <p className="text-sm font-semibold text-gray-700 mt-1">
-                      {student?.class ||
-                        "Not Assigned"}
+                      {student?.class || "Not Assigned"}
                     </p>
                   </div>
                 </div>
@@ -227,8 +154,7 @@ const StudentForm = ({
                     </p>
 
                     <p className="text-sm font-semibold text-gray-700 mt-1">
-                      {student?.phone ||
-                        "No Phone"}
+                      {student?.phone || "No Phone"}
                     </p>
                   </div>
                 </div>
@@ -246,10 +172,8 @@ const StudentForm = ({
                     </p>
 
                     <p className="text-sm font-semibold text-gray-700 mt-1">
-                      {student?.city ||
-                        "City"}
-                      {student?.state &&
-                        `, ${student.state}`}
+                      {student?.city || "City"}
+                      {student?.state && `, ${student.state}`}
                     </p>
                   </div>
                 </div>
@@ -271,23 +195,17 @@ const StudentForm = ({
                     First Name
                   </label>
 
-                  <input
-                    type="text"
-                    placeholder="Enter first name"
+                  <input type="text" placeholder="Enter first name"
                     {...register("first_name")}
-                    className={`w-full h-12 rounded-xl border bg-gray-50 px-4 text-sm outline-none transition-all ${
-                      errors.first_name
-                        ? "border-red-300 focus:border-red-400"
+                    className={`w-full h-12 rounded-xl border bg-gray-50 px-4 text-sm outline-none transition-all
+                       ${errors.first_name ? "border-red-300 focus:border-red-400"
                         : "border-gray-200 focus:border-emerald-400 focus:bg-white"
-                    }`}
+                      }`}
                   />
 
                   {errors.first_name && (
                     <p className="text-red-500 text-xs mt-2">
-                      {
-                        errors.first_name
-                          .message
-                      }
+                      {errors.first_name.message}
                     </p>
                   )}
                 </div>
@@ -298,19 +216,14 @@ const StudentForm = ({
                     Middle Name
                   </label>
 
-                  <input
-                    type="text"
-                    placeholder="Enter middle name"
+                  <input type="text" placeholder="Enter middle name"
                     {...register("middle_name")}
-                    className="w-full h-12 rounded-xl border border-gray-200 bg-gray-50 px-4 text-sm outline-none transition-all focus:border-emerald-400 focus:bg-white"
-                  />
+                    className="w-full h-12 rounded-xl border border-gray-200 bg-gray-50 px-4 text-sm outline-none 
+                    transition-all focus:border-emerald-400 focus:bg-white"/>
 
                   {errors.middle_name && (
                     <p className="text-red-500 text-xs mt-2">
-                      {
-                        errors.middle_name
-                          .message
-                      }
+                      {errors.middle_name.message}
                     </p>
                   )}
                 </div>
@@ -324,23 +237,17 @@ const StudentForm = ({
                     Last Name
                   </label>
 
-                  <input
-                    type="text"
-                    placeholder="Enter last name"
+                  <input type="text" placeholder="Enter last name"
                     {...register("last_name")}
-                    className={`w-full h-12 rounded-xl border bg-gray-50 px-4 text-sm outline-none transition-all ${
-                      errors.last_name
-                        ? "border-red-300 focus:border-red-400"
-                        : "border-gray-200 focus:border-emerald-400 focus:bg-white"
-                    }`}
+                    className={`w-full h-12 rounded-xl border bg-gray-50 px-4 text-sm outline-none transition-all ${errors.last_name
+                      ? "border-red-300 focus:border-red-400"
+                      : "border-gray-200 focus:border-emerald-400 focus:bg-white"
+                      }`}
                   />
 
                   {errors.last_name && (
                     <p className="text-red-500 text-xs mt-2">
-                      {
-                        errors.last_name
-                          .message
-                      }
+                      {errors.last_name.message}
                     </p>
                   )}
                 </div>
@@ -351,23 +258,17 @@ const StudentForm = ({
                     Class
                   </label>
 
-                  <input
-                    type="text"
-                    placeholder="Enter class"
+                  <input type="text" placeholder="Enter class"
                     {...register("class")}
-                    className={`w-full h-12 rounded-xl border bg-gray-50 px-4 text-sm outline-none transition-all ${
-                      errors.class
-                        ? "border-red-300 focus:border-red-400"
-                        : "border-gray-200 focus:border-emerald-400 focus:bg-white"
-                    }`}
+                    className={`w-full h-12 rounded-xl border bg-gray-50 px-4 text-sm outline-none transition-all ${errors.class
+                      ? "border-red-300 focus:border-red-400"
+                      : "border-gray-200 focus:border-emerald-400 focus:bg-white"
+                      }`}
                   />
 
                   {errors.class && (
                     <p className="text-red-500 text-xs mt-2">
-                      {
-                        errors.class
-                          .message
-                      }
+                      {errors.class.message}
                     </p>
                   )}
                 </div>
@@ -379,15 +280,12 @@ const StudentForm = ({
                   Address
                 </label>
 
-                <textarea
-                  rows={4}
-                  placeholder="Enter address"
+                <textarea rows={4} placeholder="Enter address"
                   {...register("address")}
-                  className={`w-full rounded-2xl border bg-gray-50 px-4 py-3 text-sm outline-none resize-none transition-all ${
-                    errors.address
-                      ? "border-red-300 focus:border-red-400"
-                      : "border-gray-200 focus:border-emerald-400 focus:bg-white"
-                  }`}
+                  className={`w-full rounded-2xl border bg-gray-50 px-4 py-3 text-sm outline-none resize-none transition-all ${errors.address
+                    ? "border-red-300 focus:border-red-400"
+                    : "border-gray-200 focus:border-emerald-400 focus:bg-white"
+                    }`}
                 />
 
                 {errors.address && (
@@ -407,22 +305,17 @@ const StudentForm = ({
                     State
                   </label>
 
-                  <input
-                    type="text"
-                    placeholder="Enter state"
+                  <input type="text" placeholder="Enter state"
                     {...register("state")}
-                    className={`w-full h-12 rounded-xl border bg-gray-50 px-4 text-sm outline-none transition-all ${
-                      errors.state
-                        ? "border-red-300 focus:border-red-400"
-                        : "border-gray-200 focus:border-emerald-400 focus:bg-white"
-                    }`}
+                    className={`w-full h-12 rounded-xl border bg-gray-50 px-4 text-sm outline-none transition-all ${errors.state
+                      ? "border-red-300 focus:border-red-400"
+                      : "border-gray-200 focus:border-emerald-400 focus:bg-white"
+                      }`}
                   />
 
                   {errors.state && (
                     <p className="text-red-500 text-xs mt-2">
-                      {
-                        errors.state.message
-                      }
+                      {errors.state.message}
                     </p>
                   )}
                 </div>
@@ -433,22 +326,17 @@ const StudentForm = ({
                     City
                   </label>
 
-                  <input
-                    type="text"
-                    placeholder="Enter city"
+                  <input type="text" placeholder="Enter city"
                     {...register("city")}
-                    className={`w-full h-12 rounded-xl border bg-gray-50 px-4 text-sm outline-none transition-all ${
-                      errors.city
-                        ? "border-red-300 focus:border-red-400"
-                        : "border-gray-200 focus:border-emerald-400 focus:bg-white"
-                    }`}
+                    className={`w-full h-12 rounded-xl border bg-gray-50 px-4 text-sm outline-none transition-all ${errors.city
+                      ? "border-red-300 focus:border-red-400"
+                      : "border-gray-200 focus:border-emerald-400 focus:bg-white"
+                      }`}
                   />
 
                   {errors.city && (
                     <p className="text-red-500 text-xs mt-2">
-                      {
-                        errors.city.message
-                      }
+                      {errors.city.message}
                     </p>
                   )}
                 </div>
@@ -459,23 +347,17 @@ const StudentForm = ({
                     Pincode
                   </label>
 
-                  <input
-                    type="text"
-                    placeholder="Enter pincode"
+                  <input type="text" placeholder="Enter pincode"
                     {...register("pincode")}
-                    className={`w-full h-12 rounded-xl border bg-gray-50 px-4 text-sm outline-none transition-all ${
-                      errors.pincode
-                        ? "border-red-300 focus:border-red-400"
-                        : "border-gray-200 focus:border-emerald-400 focus:bg-white"
-                    }`}
+                    className={`w-full h-12 rounded-xl border bg-gray-50 px-4 text-sm outline-none transition-all ${errors.pincode
+                      ? "border-red-300 focus:border-red-400"
+                      : "border-gray-200 focus:border-emerald-400 focus:bg-white"
+                      }`}
                   />
 
                   {errors.pincode && (
                     <p className="text-red-500 text-xs mt-2">
-                      {
-                        errors.pincode
-                          .message
-                      }
+                      {errors.pincode.message}
                     </p>
                   )}
                 </div>
@@ -487,39 +369,25 @@ const StudentForm = ({
                   Phone Number
                 </label>
 
-                <input
-                  type="text"
-                  placeholder="Enter phone number"
+                <input type="text" placeholder="Enter phone number"
                   {...register("phone")}
-                  className={`w-full h-12 rounded-xl border bg-gray-50 px-4 text-sm outline-none transition-all ${
-                    errors.phone
-                      ? "border-red-300 focus:border-red-400"
-                      : "border-gray-200 focus:border-emerald-400 focus:bg-white"
-                  }`}
-                />
+                  className={`w-full h-12 rounded-xl border bg-gray-50 px-4 text-sm outline-none transition-all ${errors.phone
+                    ? "border-red-300 focus:border-red-400"
+                    : "border-gray-200 focus:border-emerald-400 focus:bg-white"
+                    }`} />
 
                 {errors.phone && (
                   <p className="text-red-500 text-xs mt-2">
-                    {
-                      errors.phone.message
-                    }
+                    {errors.phone.message}
                   </p>
                 )}
               </div>
 
               {/* BUTTON */}
-              <button
-                type="submit"
-                disabled={isPending}
-                className="w-full h-12 rounded-xl bg-emerald-600 hover:bg-emerald-700 disabled:opacity-70 text-white text-sm font-medium tracking-wide transition-all"
-              >
-                {isPending
-                  ? student
-                    ? "Updating..."
-                    : "Adding..."
-                  : student
-                  ? "Update Student"
-                  : "Add Student"}
+              <button type="submit" disabled={isPending}
+                className="w-full h-12 rounded-xl bg-emerald-600 hover:bg-emerald-700 disabled:opacity-70
+                 text-white text-sm font-medium tracking-wide transition-all cursor-pointer">
+                {isPending ? student ? "Updating..." : "Adding..." : student ? "Update Student" : "Add Student"}
               </button>
             </form>
           </div>

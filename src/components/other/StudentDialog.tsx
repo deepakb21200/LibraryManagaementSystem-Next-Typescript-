@@ -148,7 +148,7 @@ const StudentDialog = ({ open, onOpenChange, student }) => {
         </h2>
 
         {/* Student Table */}
-        {/* <StudentTable student={student} /> */}
+ 
         {!student ? (
   <p className="text-center">Loading...</p>
 ) : (

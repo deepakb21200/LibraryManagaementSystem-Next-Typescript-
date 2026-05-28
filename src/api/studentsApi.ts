@@ -1,13 +1,14 @@
 "use server"
 
+import { FormValues } from "@/components/other/StudentForm";
 import { createClient } from "@/lib/supabase";
 
- 
 
- 
+
+
 
 export const getStudents = async () => {
-        const supabase=createClient()
+  const supabase = createClient()
   const { data: students, error } = await supabase
     .from("students")
     .select("*")
@@ -19,7 +20,7 @@ export const getStudents = async () => {
   }
 
   // console.log("rocks", students);
-  
+
   return students;
 };
 
@@ -29,8 +30,8 @@ export const getStudents = async () => {
 
 
 
-export const addStudent = async (student) => {
-  const supabase=createClient()
+export const addStudent = async (student: FormValues) => {
+  const supabase = createClient()
   const { data, error } = await supabase
     .from("students")
     .insert([student])
@@ -40,14 +41,14 @@ export const addStudent = async (student) => {
     console.log(error);
     throw new Error("Error while adding student. Try again later.");
   }
-// console.log("add student,", data);
+  // console.log("add student,", data);
   return data;
 };
 
 
 
-export const getSingleStudent = async (id) => {
-  const supabase=createClient()
+export const getSingleStudent = async (id: string) => {
+  const supabase = createClient()
   const { data: student, error } = await supabase
     .from("students")
     .select("*")
@@ -68,8 +69,8 @@ export const getSingleStudent = async (id) => {
 
 
 
-export const deleteStudent = async (id) => {
-    const supabase=createClient()
+export const deleteStudent = async (id: string) => {
+  const supabase = createClient()
 
   const { data, error } = await supabase.from("students").delete().eq("id", id);
 
@@ -86,8 +87,8 @@ export const deleteStudent = async (id) => {
 
 
 
-export const getStudentByBookId = async (bookId) => {
-      const supabase=createClient()
+export const getStudentByBookId = async (bookId: string) => {
+  const supabase = createClient()
 
   const { data: student_books, error } = await supabase
     .from("student_books")
@@ -95,8 +96,8 @@ export const getStudentByBookId = async (bookId) => {
     .eq("book_id", bookId)
     .maybeSingle();
 
-    // console.log(student_books,"d");
-    
+  // console.log(student_books,"d");
+
   if (error) {
     console.log(error);
     throw new Error(
@@ -114,7 +115,7 @@ export const getStudentByBookId = async (bookId) => {
     .select("*")
     .eq("id", student_books.student_id)
     .maybeSingle();
-console.log(student);
+  console.log(student);
 
   if (studentError) {
     console.log(studentError);
@@ -124,5 +125,5 @@ console.log(student);
   }
 
   return student;
- 
+
 };

@@ -3,10 +3,10 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 
 import { toast } from "sonner";
-import { FormValues, Student, UpdateStudent } from "@/types/student";
-import StudentForm from "@/components/other/StudentForm";
 
- 
+import StudentForm, { EditPayload, FormValues, HandleSubmit, Student } from "@/components/other/StudentForm";
+
+
 import { updateStudent } from "@/api/studentBooksApi";
 import { useRouter } from "next/navigation";
 import { getSingleStudent } from "@/api/studentsApi";
@@ -17,15 +17,14 @@ type Props = {
 
 
 
-const EditStudent = ({id}:Props ) => {
-  // const params = useParams();
-  // const id = params.id as string;
+const EditStudent = ({ id }: Props) => {
+
   const router = useRouter()
   const queryClient = useQueryClient();
 
 
 
-  const { isPending, mutateAsync } = useMutation<Student[], Error, UpdateStudent>({
+  const { isPending, mutateAsync } = useMutation({
     mutationKey: ["editStudent"],
     mutationFn: updateStudent,
     onSuccess: () => {
@@ -47,7 +46,7 @@ const EditStudent = ({id}:Props ) => {
     data: student,
     isPending: studentIsPending,
     error,
-  } = useQuery<Student, Error>({
+  } = useQuery({
     queryKey: ["singleStudent", id],
     queryFn: () => getSingleStudent(id),
   });
@@ -56,87 +55,41 @@ const EditStudent = ({id}:Props ) => {
 
 
 
-  //  const handleFormSubmit = async ({ id, student }: ) :Promise<boolean>=> {
-  //   try {
-  //     await mutateAsync({ id, student });
-  //     return true;
-  //   } catch (error) {
-  //     console.log(error);
-  //     return false;
-  //   }
-  // };
-
-
-  // const handleFormSubmit = async (values: FormValues): Promise<boolean> => {
-  //   try {
-  //     await mutateAsync({ id, student: values });
-  //     return true;
-  //   } catch (error) {
-  //     console.log(error);
-  //     return false;
-  //   }
-  // };
-
-//   const handleFormSubmit = async (values: FormValues) :Promise<boolean>=> {
-//   // await mutateAsync({
-//   //   id: student!.id,
-//   //   student: values,
-//   // });
-
-//   if (!student) return false;
-//   await mutateAsync({
-//   id: student.id,
-//   student: values,
-// });
-
-//   return true;
-// };
-
-
-const handleFormSubmit = async (values: FormValues): Promise<boolean> => {
-  try {
-    // if (!student) return false;
-
-    await mutateAsync({
-      id: student!.id,
-      student: values,
-    });
-
-    return true;
-  } catch (error) {
-    console.log(error);
-    return false;
-  }
-};
 
 
 
-  //  const handleFormSubmit = async ({ id, student }:UpdateStudent ) :Promise<boolean>=> {
-  //   try {
-  //     await mutateAsync({ id, student });
-  //     return true;
-  //   } catch (error) {
-  //     console.log(error);
-  //     return false;
-  //   }
-  // }
+  //editstudentcomponent
+  const handleFormSubmit: HandleSubmit = async (values) => {
+    try {
+
+      await mutateAsync(values as EditPayload);
+
+      return true;
+
+    } catch {
+      return false;
+    }
+  };
+
+
+
 
   return (
-  <>
-    <div  className="flex justify-center h-full items-center ">
-      
-      {error && <p className="text-2xl text-red-500 tracking-wide text-center">{error.message}</p>}
-      {studentIsPending && <p className="text-center text-3xl my-2 tracking-wider">Loading...</p>}
+    <>
+      <div className="flex justify-center h-full items-center ">
+
+        {error && <p className="text-2xl text-red-500 tracking-wide text-center">{error.message}</p>}
+        {studentIsPending && <p className="text-center text-3xl my-2 tracking-wider">Loading...</p>}
         <StudentForm
-        key={student?.id}
-        student={student}
-        handleFormSubmit={handleFormSubmit}
-        isPending={isPending || studentIsPending}
-      />
-     
-    </div>
-   
-  </>
+          key={student?.id}
+          student={student}
+          handleFormSubmit={handleFormSubmit}
+          isPending={isPending || studentIsPending}
+        />
+
+      </div>
+
+    </>
   );
 }
 

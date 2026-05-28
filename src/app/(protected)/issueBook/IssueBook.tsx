@@ -21,82 +21,30 @@ import { getStudents } from "../../../api/studentsApi";
 import { issueBook } from "../../../api/studentBooksApi";
 import Dropdown from "@/components/other/DropDown";
 
-interface DropdownItem {
-  id: string;
-  value: string;
 
-}
+
 
 interface Selection {
   book?: string;
   student?: string;
 }
 
-// type Book = {
-//   id: string;
-//   name: string;
-// };
-
-// type Student = {
-//   id: string;
-//   first_name: string;
-//   middle_name?: string;
-//   last_name: string;
-// };
-
-
-type Book = {
-  id: string;
-  name: string;
-  author: string;
-  isbn: string;
-};
-
-type Student = {
-  id: string;
-  first_name: string;
-  middle_name?: string;
-  last_name: string;
-  class: string;
-};
-
 
 
 function IssueBook() {
   const queryClient = useQueryClient();
 
-  const [selection, setSelection] =
-    useState<Selection>({});
+  const [selection, setSelection] = useState<Selection>({});
 
   /* BOOKS QUERY */
 
-  const {
-    data: books,
-    isPending,
-    error,
-  } = useQuery<
-    Book[],
-    Error,
-    DropdownItem[]
-  >({
+  const { data: books, isPending, error, } = useQuery({
     queryKey: ["unassignedBooks"],
-
     queryFn: getUnassignedBooks,
-
-
-    // select: (data) =>
-    //   data.map((book) => ({
-    //     id: book.id,
-    //     value: book.name,
-    //     author: book.author,
-    //     isbn: book.isbn,
-    //   })),
-
     select: (data) =>
       data.map((book) => ({
         id: book.id,
         value: book.name,
-        label: book.name,
         author: book.author,
         isbn: book.isbn,
       })),
@@ -106,74 +54,27 @@ function IssueBook() {
 
   /* STUDENTS QUERY */
 
-  const {
-    data: students,
-    isPending: isStudentsPending,
-    error: studentError,
-  } = useQuery<
-    Student[],
-    Error,
-    DropdownItem[]
-  >({
+  const { data: students, isPending: isStudentsPending, error: studentError } = useQuery({
     queryKey: ["students"],
-
     queryFn: getStudents,
-
-
-
-    // select: (data) =>
-    //   data.map(
-    //     ({
-    //       id,
-    //       first_name,
-    //       middle_name,
-    //       last_name,
-    //       class: studentClass,
-    //     }) => ({
-    //       id,
-
-    //       value: `${first_name} ${middle_name || ""
-    //         } ${last_name}`,
-
-    //       class: studentClass,
-    //     })
-    //   ),
-
-    select: (data) =>
-  data.map(
-    ({
-      id,
-      first_name,
-      middle_name,
-      last_name,
-      class: studentClass,
-    }) => ({
-      id,
-
-      value: `${first_name} ${
-        middle_name || ""
-      } ${last_name}`,
-
-      label: `${first_name} ${
-        middle_name || ""
-      } ${last_name}`,
-
-      class: studentClass,
-    })
-  ),
+    select: (data) => data.map(
+      ({ id, first_name, middle_name, last_name, class: studentClass, }) => ({
+        id,
+        value: `${first_name} ${middle_name || ""} ${last_name}`,
+        class: studentClass,
+      })
+    ),
 
 
   });
 
 
-  console.log(students, "ss");
+  // console.log(students, "ss");
 
 
   /* UPDATE SELECTION */
 
-  const updateSelection = (
-    selectedValue: Selection
-  ) => {
+  const updateSelection = (selectedValue: Selection) => {
     setSelection((prev) => ({
       ...prev,
       ...selectedValue,
@@ -182,15 +83,11 @@ function IssueBook() {
 
 
   useEffect(() => {
-    console.log(selection);
-
+    console.log(selection)
   }, [selection])
   /* MUTATION */
 
-  const {
-    isPending: issuePending,
-    mutate,
-  } = useMutation({
+  const { isPending: issuePending, mutate } = useMutation({
     mutationKey: ["issueBook"],
 
     mutationFn: issueBook,
@@ -198,9 +95,7 @@ function IssueBook() {
     onSuccess: () => {
       setSelection({});
 
-      toast(
-        "✅ Book is successfully issued."
-      );
+      toast( "✅ Book is successfully issued.");
 
       queryClient.invalidateQueries({
         queryKey: ["unassignedBooks"],
@@ -216,11 +111,7 @@ function IssueBook() {
   });
 
   const handleIssueBook = () => {
-    if (
-      !selection.book ||
-      !selection.student
-    )
-      return;
+    if (!selection.book || !selection.student) return
 
     mutate({
       student_id: selection.student,
@@ -228,14 +119,10 @@ function IssueBook() {
     });
   };
 
-  const selectedBook = books?.find(
-    (book) => String(book.id) === String(selection.book)
-  );
+  const selectedBook = books?.find((book) => String(book.id) === String(selection.book))
 
-  const selectedStudent = students?.find(
-    (student) =>
-      String(student.id) === String(selection.student)
-  );
+  const selectedStudent = students?.find((student) => String(student.id) === String(selection.student))
+
   return (
     <div className="p-3 sm:p-5">
       <div className="max-w-5xl mx-auto bg-white border border-gray-200 rounded-3xl overflow-hidden shadow-sm">
@@ -276,9 +163,7 @@ function IssueBook() {
                     </p>
 
                     <p className="text-sm font-semibold text-gray-700 mt-1 truncate">
-                      {selection.book
-                        ? "Book Selected"
-                        : "No Book"}
+                      {selection.book ? "Book Selected" : "No Book"}
                     </p>
                   </div>
                 </div>
@@ -372,9 +257,7 @@ function IssueBook() {
                 <Dropdown
                   data={books}
                   title="book"
-                  updateSelection={
-                    updateSelection
-                  }
+                  updateSelection={updateSelection}
                   value={selection.book}
                 />
               </div>

@@ -3,7 +3,7 @@ import { useRouter } from "next/navigation"
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { addStudent } from "../../../api/studentsApi";
 import { toast } from "sonner";
-import StudentForm, { FormValues } from "@/components/other/StudentForm";
+import StudentForm, { FormValues, HandleSubmit } from "@/components/other/StudentForm";
 
 
 
@@ -28,17 +28,19 @@ function AddStudent() {
     });
 
 
-
-
-    const handleFormSubmit = async (book: FormValues) => {
+    //addstudentcomponnt
+    const handleFormSubmit: HandleSubmit = async (values) => {
         try {
-            await mutateAsync(book);
+
+            await mutateAsync(values as FormValues);
+
             return true;
-        } catch (error) {
-            console.log(error);
+
+        } catch {
             return false;
         }
     };
+
     return (
         <div>
             <h2 className="my-3 text-center text-3xl">Add Student</h2>
