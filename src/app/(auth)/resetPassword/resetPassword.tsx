@@ -19,7 +19,6 @@ import { toast } from "sonner";
 import { sendResetPasswordEmail } from "@/api/auth";
 
  
-
 const formSchema = z.object({
   email: z.string().email({
     message:
@@ -27,8 +26,13 @@ const formSchema = z.object({
   }),
 });
 
+
+type ResetPasswordForm =
+  z.infer<typeof formSchema>;
+
+
 const ResetPassword = () => {
-  const form = useForm({
+  const form = useForm<ResetPasswordForm>({
     resolver: zodResolver(
       formSchema
     ),
