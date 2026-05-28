@@ -43,18 +43,27 @@ export const getUser = async () => {
   return user;
 };
 
+//yeh original h
+// export const logoutUser = async () => {
+//   const { error, data } = await supabase.auth.signOut();
+
+//   if (error) {
+//     console.log(error);
+//     throw new Error("Error during logout. Try again later.");
+//   }
+
+//   return data;
+// };
+
 export const logoutUser = async () => {
-  const { error, data } = await supabase.auth.signOut();
+  const { error } = await supabase.auth.signOut();
 
   if (error) {
     console.log(error);
     throw new Error("Error during logout. Try again later.");
   }
-
-  return data;
 };
-
-export const sendResetPasswordEmail = async (email) => {
+export const sendResetPasswordEmail = async (email:string) => {
   const { error } = await supabase.auth.resetPasswordForEmail(email, {
     redirectTo: `${window.location.origin}/resetPasswordScreen`,
   });
@@ -65,7 +74,7 @@ export const sendResetPasswordEmail = async (email) => {
   }
 };
 
-export const updatePassword = async (password) => {
+export const updatePassword = async (password:string) => {
   const { error } = await supabase.auth.updateUser({ password });
 
   if (error) {
