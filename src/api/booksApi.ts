@@ -415,18 +415,28 @@ export const addBook = async (book: AddBookPayload) => {
   const supabase = createClient()
   const { image, ...rest } = book;
   let imageURL = "";
+  console.log(image);
+
+
   if (image) {
-
-
     try {
       const imageName = `${Date.now()}_${image.name}`;
       const { data, error } = await supabase.storage
         .from("book_images")
         .upload(imageName, image);
+
       if (error) {
         throw new Error("Error while uploading image. Try again later.");
       }
       imageURL = `${process.env.NEXT_PUBLIC_PROJECT_URL}/storage/v1/object/public/${data.fullPath}`;
+
+    // Get public URL
+    //   const { data } = supabase.storage
+    //     .from("book_images")
+    //     .getPublicUrl(imageName);
+
+    //   imageURL = data.publicUrl;
+
     } catch (error: any) {
       imageURL = "";
       console.log(error);

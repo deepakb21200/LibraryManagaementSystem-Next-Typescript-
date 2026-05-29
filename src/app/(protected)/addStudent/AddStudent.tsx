@@ -7,7 +7,6 @@ import StudentForm, { FormValues, HandleSubmit } from "@/components/other/Studen
 
 
 
-
 function AddStudent() {
     const queryClient = useQueryClient();
     let router = useRouter()

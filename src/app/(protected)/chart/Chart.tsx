@@ -34,6 +34,7 @@ import {
 import { getAnalyticsByStudentId } from "../../../api/studentBooksApi";
 import { BooksDialog } from "@/components/other/BooksDialog";
 import { MONTHS } from "@/utils/constants";
+import InlineLoader from "@/components/other/InlineLoader";
 
 
 
@@ -314,13 +315,15 @@ const Chart = () => {
             </form>
 
             {/* LOADING */}
-            {isPending && (
+            {/* {isPending && (
               <div className="mt-6 border border-emerald-100 bg-emerald-50 rounded-2xl p-4">
                 <p className="text-sm text-emerald-700 font-medium">
                   Preparing chart data...
                 </p>
               </div>
-            )}
+            )} */}
+
+            {isPending && <InlineLoader text="Preparing chart data..." />}
 
             {/* CHART */}
             {/* {data?.books?.length > 0 && ( */}

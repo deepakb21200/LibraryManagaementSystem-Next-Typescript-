@@ -1,91 +1,3 @@
-// "use client";
-
-// import { useMutation } from "@tanstack/react-query";
-// import { toast } from "sonner";
-// import { useState } from "react";
-// import { getBooksByStudentId } from "@/api/booksApi";
-// import { StudentTable } from "./StudentTable";
-// import Link from "next/link";
-// import { BooksDialog } from "./BooksDialog";
-
-// const StudentDialog = ({ open, onOpenChange, student }) => {
-//     const [isBookOpen, setIsBookOpen] = useState(false);
-//     const toggleOpen = () => setIsBookOpen(!isBookOpen);
-
-//     const {
-//         data: books,
-//         isPending,
-//         mutate,
-//     } = useMutation({
-//         mutationKey: ["booksByStudent"],
-//         mutationFn: getBooksByStudentId,
-//         onError: (error) => toast(`❌ ${error.message}`),
-//     });
-
-//     // ❌ agar open false hai to render hi mat karo
-//     if (!open) return null;
-
-//     return (
-//         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 w-full">
-
-//             {/* Modal Box */}
-//             <div className="w-full max-w-7xl bg-white rounded-2xl shadow-xl p-6 relative">
-
-//                 {/* Close Button */}
-//                 <button
-//                     onClick={() => onOpenChange(false)}
-//                     className="absolute top-3 right-4 text-gray-500 hover:text-black text-xl cursor-pointer"
-//                 >
-//                     ✕
-//                 </button>
-
-//                 {/* Title */}
-//                 <h2 className="text-center text-2xl font-semibold tracking-wide mb-4">
-//                     Student Information
-//                 </h2>
-
-//                 {/* Student Table */}
-//                 <StudentTable student={student} />
-
-
-//                 <button
-//                     type="button"
-//                     className="block w-full text-center text-lg text-blue-600 mt-4 underline cursor-pointer"
-//                     onClick={() => {
-//                         mutate(student?.id, {
-//                             onSuccess: toggleOpen,
-//                         });
-//                     }}
-//                 >
-//                     List of books assigned to {student?.first_name}
-//                 </button>
-
-//                 {/* Loading */}
-//                 {isPending && (
-//                     <p className="text-center text-xl mt-3">Loading...</p>
-//                 )}
-
-//                 {/* Books Dialog */}
-//                 <BooksDialog
-//                     open={isBookOpen}
-//                     onOpenChange={toggleOpen}
-//                     studentName={student?.first_name}
-//                     books={books}
-//                 />
-//             </div>
-//         </div>
-//     );
-// };
-
-// export default StudentDialog;
-
-
-
-
-
-
-
-
 "use client";
 
 import { useMutation } from "@tanstack/react-query";
@@ -94,11 +6,8 @@ import { useState, useEffect } from "react";
 import { getBooksByStudentId } from "@/api/booksApi";
 import { StudentTable } from "./StudentTable";
 import { BooksDialog } from "./BooksDialog";
-
-
-
-
-// 👇 Student type
+ 
+// ── Types ──────────────────────────────────────────────────────────────────
 interface Student {
   id: string;
   first_name: string;
@@ -108,118 +17,141 @@ interface Student {
   address: string;
   city: string;
   phone: string;
-
-
-  //temporay basis check karne ki likhana hi ki nhi 
   state: string;
-pincode: string | number;
+  pincode: string | number;
 }
 
-// 👇 Props type
 interface StudentDialogProps {
   open: boolean;
   onOpenChange: (value: boolean) => void;
   student?: Student;
 }
+// ──────────────────────────────────────────────────────────────────────────
 
-const StudentDialog = ({
-  open,
-  onOpenChange,
-  student,
-}: StudentDialogProps) => {
+const StudentDialog = ({ open, onOpenChange, student }: StudentDialogProps) => {
   const [isBookOpen, setIsBookOpen] = useState(false);
-  const toggleOpen = () => setIsBookOpen(!isBookOpen);
-
-  console.log("stu", student);
-  
-
+  const toggleOpen = () => setIsBookOpen((prev) => !prev);
   const [isMounted, setIsMounted] = useState(open);
+ 
 
   useEffect(() => {
     if (open) setIsMounted(true);
     else {
-      setTimeout(() => setIsMounted(false), 200); // animation duration
+      setTimeout(() => setIsMounted(false), 200);
     }
   }, [open]);
 
-  const {
-    data: books,
-    isPending,
-    mutate,
-  } = useMutation({
+  // close on outside click
+ 
+
+  const { data: books, isPending, mutate } = useMutation({
     mutationKey: ["booksByStudent"],
     mutationFn: getBooksByStudentId,
-    onError: (error) => toast(`❌ ${error.message}`),
+    onError: (error: Error) => toast(`❌ ${error.message}`),
   });
 
   if (!isMounted) return null;
 
   return (
-    <div
-      className={`fixed inset-0 z-50 flex items-center justify-center p-4 transition-all duration-200 ${
-        open ? "bg-black/60 backdrop-blur-sm" : "bg-black/0"
-      }`}
-    >
-      {/* Modal Box */}
-      <div
-        className={`w-full max-w-7xl bg-white rounded-2xl shadow-xl p-6 relative transition-all duration-200 ${
-          open
-            ? "opacity-100 scale-100 translate-y-0"
-            : "opacity-0 scale-95 translate-y-4"
-        }`}
-      >
-        {/* Close Button */}
-        <button
-          onClick={() => onOpenChange(false)}
-          className="absolute top-3 right-4 text-gray-500 hover:text-black text-xl cursor-pointer"
-        >
-          ✕
-        </button>
+    <>
+    <div  onClick={() => onOpenChange(false)}
+      className={`fixed inset-0 z-50 flex rounded-2xl items-center justify-center p-4 transition-all duration-200   
+       ${open ? "bg-black/40 backdrop-blur-sm" : "bg-black/0"}`}>
+      {/* Modal Box  bg-white*/}
+      <div onClick={(e) => e.stopPropagation()}
+        className={`w-full max-w-7xl  bg-white rounded-2xl shadow-xl p-6 relative transition-all duration-200 ${open
+          ? "opacity-100 scale-100 translate-y-0": "opacity-0 scale-95 translate-y-4"} `}>
+ 
+        <div className="flex items-center  mb-5  ">
 
-        {/* Title */}
-        <h2 className="text-center text-2xl font-semibold tracking-wide mb-4">
-          Student Information
-        </h2>
+          <div className="flex flex-1  justify-center  md:flex-row flex-col items-center">
+  
+            <h2 className="text-lg font-semibold text-gray-800">
+              Student Information- {"  "}
+            </h2>
+            {student && (
+              <p className="text-lg font-semibold text-gray-800  ">
+                {student.first_name}{" "}
+                {student.middle_name ? `${student.middle_name}` : "-"}
+                {student.last_name}
+              </p>
+            )}
+          </div>
+
+          {/* Close Button */}
+          <button  onClick={() => onOpenChange(false)}  className="w-8 h-8 flex items-center justify-center rounded-xl
+           border border-gray-200 text-gray-400 hover:text-gray-700 hover:bg-gray-50 transition-all
+            text-base cursor-pointer">
+            ✕
+          </button>
+        </div>
 
         {/* Student Table */}
- 
         {!student ? (
-  <p className="text-center">Loading...</p>
-) : (
-  <StudentTable student={student} />
-)}
-
-        {/* Button */}
-        <button
-          type="button"
-          className="block w-full text-center text-lg text-blue-600 mt-4 underline cursor-pointer"
-          onClick={() => {
-              if (!student) return;
-
-            mutate(student?.id, {
-              onSuccess: toggleOpen,
-            });
-          }}
-        >
-          List of books assigned to {student?.first_name}
-        </button>
-
-        {/* Loading */}
-        {isPending && (
-          <p className="text-center text-xl mt-3">Loading...</p>
+          <p className="text-center text-gray-400 py-6">Loading...</p>
+        ) : (
+          <StudentTable student={student} />
         )}
 
-        {/* Books Dialog */}
+        {/* Books Button */}
+        <button
+          type="button"
+          onClick={() => {
+            if (!student) return;
+            mutate(student.id, { onSuccess: toggleOpen });
+          }}
+          className="mt-5 w-full cursor-pointer h-11 rounded-xl border border-emerald-200 text-emerald-700 text-sm font-medium hover:bg-emerald-50 transition-all flex items-center justify-center gap-2"
+        >
+          {isPending ? (
+            <span className="text-gray-400">Loading books...</span>
+          ) : (
+            <>
+
+              <span>View books assigned to {student?.first_name}</span>
+              <span className="text-emerald-500">→</span>
+
+            </>
+          )}
+        </button>
+
+        {/* Books Dialog — unchanged as requested */}
         <BooksDialog
           open={isBookOpen}
           onOpenChange={toggleOpen}
           studentName={student?.first_name}
-          // books={books}
-            books={books || []}
+          books={books || []}
         />
+
+        
       </div>
+
+          {/* <BooksDialog
+          open={isBookOpen}
+          onOpenChange={toggleOpen}
+          studentName={student?.first_name}
+          books={books || []}
+        /> */}
+
+ 
+      
     </div>
+
+     
+    </>
+
   );
 };
 
 export default StudentDialog;
+
+
+
+
+
+
+
+
+
+
+
+ 

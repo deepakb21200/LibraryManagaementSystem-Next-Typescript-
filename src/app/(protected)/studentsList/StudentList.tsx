@@ -412,7 +412,7 @@ function StudentsList() {
 
   const [studentName, setStudentName] = useState("");
 
-const router = useRouter();
+  const router = useRouter();
   const queryClient = useQueryClient();
 
   const {
@@ -491,29 +491,29 @@ const router = useRouter();
         </div>
 
         {/* Desktop Table */}
-      <CommonTable
-  data={filteredStudents || []}
-  type="students"
-  onView={(student) => {
-    setStudentName(student.first_name);
+        <CommonTable
+          data={filteredStudents || []}
+          type="students"
+          onView={(student) => {
+            setStudentName(student.first_name);
 
-    getBooksByStudent(student.id, {
-      onSuccess: () => toggleOpen(),
-    });
-  }}
-  onEdit={(student) =>
-    router.push(`/students/${student.id}`)
-  }
-  onDelete={(student) => {
-    const shouldDelete = window.confirm(
-      "Are you sure you want to delete the selected student?"
-    );
+            getBooksByStudent(student.id, {
+              onSuccess: () => toggleOpen(),
+            });
+          }}
+          onEdit={(student) =>
+            router.push(`/students/${student.id}`)
+          }
+          onDelete={(student) => {
+            const shouldDelete = window.confirm(
+              "Are you sure you want to delete the selected student?"
+            );
 
-    if (shouldDelete) {
-      mutate(student.id);
-    }
-  }}
-/>
+            if (shouldDelete) {
+              mutate(student.id);
+            }
+          }}
+        />
 
         {/* Mobile + Tablet Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 xl:hidden">
@@ -578,14 +578,12 @@ const router = useRouter();
 
               {/* Footer */}
               <div className="mt-5 pt-4 border-t border-gray-100 flex items-center justify-between">
-                <button
-                  onClick={() => {
-                    setStudentName(student.first_name);
-
-                    getBooksByStudent(student.id, {
-                      onSuccess: () => toggleOpen(),
-                    });
-                  }}
+                <button onClick={() => {
+                  setStudentName(student.first_name)
+                  getBooksByStudent(student.id, {
+                    onSuccess: () => toggleOpen()
+                  })
+                }}
                   className="flex items-center gap-1.5 text-sm text-emerald-700 font-medium"
                 >
                   <MdMenuBook className="text-lg" />
@@ -594,7 +592,7 @@ const router = useRouter();
 
                 <div className="flex items-center gap-2">
                   <button
-              onClick={() => router.push(`/students/${student.id}`)}
+                    onClick={() => router.push(`/students/${student.id}`)}
                     className="w-9 h-9 rounded-lg border border-gray-200 flex items-center justify-center text-gray-500 hover:bg-emerald-50 hover:text-emerald-700 transition-all"
                   >
                     <MdEdit className="text-lg" />
@@ -640,7 +638,7 @@ const router = useRouter();
 
       {/* Dialog */}
       {/* {books?.length > 0 && ( */}
-       {books && books.length > 0 && (
+      {books && books.length > 0 && (
         <BooksDialog
           books={books}
           open={open}
@@ -659,25 +657,3 @@ export default StudentsList;
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
- 
-
-
- 

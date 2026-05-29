@@ -30,7 +30,7 @@ function DatePicker({ date, updateDate }: DatePickerProps) {
           (date.to ? (<> {format(date.from, "LLL dd, y")} - {format(date.to, "LLL dd, y")}</>)
             : (format(date.from, "LLL dd, y"))) : ("Pick a date")} */}
 
-         {date?.from &&
+         {date.from &&
           date.to && (<> {format(date.from, "LLL dd, y")} - {format(date.to, "LLL dd, y")}</>)  }
       </button>
 

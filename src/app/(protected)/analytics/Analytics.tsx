@@ -9,6 +9,7 @@ import { subMonths } from "date-fns";
 import { getFormattedDate } from "../../../utils/functions";
 import DatePicker from "./DatePicker";
 import { getAnalyticsByStudentId } from "@/api/studentBooksApi";
+import InlineLoader from "@/components/other/InlineLoader";
 
 // ── Types ──────────────────────────────────────────────────────────────────
 interface DateRange {
@@ -182,13 +183,14 @@ function Analytics() {
             </form>
 
             {/* LOADING */}
-            {isPending && (
+            {/* {isPending && (
               <div className="mt-6 border border-emerald-100 bg-emerald-50 rounded-2xl p-4">
                 <p className="text-sm text-emerald-700 font-medium">
                   Fetching analytics data...
                 </p>
               </div>
-            )}
+            )} */}
+            {isPending && <InlineLoader text="Preparing analytics data..." />}
 
             {/* TABLE */}
             {/* {data?.books?.length > 0 && ( */}

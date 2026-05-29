@@ -1,12 +1,8 @@
 "use client"
+
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-
-
 import { toast } from "sonner";
-
-import StudentForm, { EditPayload, FormValues, HandleSubmit, Student } from "@/components/other/StudentForm";
-
-
+import StudentForm, { EditPayload, HandleSubmit } from "@/components/other/StudentForm";
 import { updateStudent } from "@/api/studentBooksApi";
 import { useRouter } from "next/navigation";
 import { getSingleStudent } from "@/api/studentsApi";
@@ -50,9 +46,6 @@ const EditStudent = ({ id }: Props) => {
     queryKey: ["singleStudent", id],
     queryFn: () => getSingleStudent(id),
   });
-
-
-
 
 
 

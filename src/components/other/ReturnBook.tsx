@@ -66,9 +66,7 @@ function ReturnBook() {
     onSuccess: () => {
       setSelection({});
 
-      toast(
-        "✅ Book is successfully returned."
-      );
+      toast( "✅ Book is successfully returned." );
 
       queryClient.invalidateQueries({
         queryKey: ["assignedBooks"],

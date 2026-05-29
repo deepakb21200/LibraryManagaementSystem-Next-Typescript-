@@ -7,7 +7,6 @@ import { useMemo, useRef, useState } from "react";
 import { toast } from "sonner";
 import { MdCloudUpload, MdImage, MdMenuBook } from "react-icons/md";
 import { validImageCheck } from "@/utils/functions";
-import { HandleFormSubmitAdd, HandleFormSubmitEdit } from "@/app/(protected)/addBook/AddBook";
 
 export const formSchema = z.object({
   name: z.string().refine((v) => v.trim() !== "", "This is a required field."),
@@ -60,7 +59,9 @@ export interface Book {
 // };
 
 // type BookFormProps = AddBookFormProps | EditBookFormProps;
+export type HandleFormSubmitAdd = (values: AddBookPayload) => Promise<boolean>;
 
+type HandleFormSubmitEdit = (values: EditBookPayload) => Promise<boolean>;
 
 // ✅ ab — ek hi type
 type BookFormProps = {
@@ -314,3 +315,33 @@ function BookForm({ handleFormSubmit, book, isPending }: BookFormProps) {
 }
 
 export default BookForm;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -147,6 +147,7 @@
 
 import useUser from "@/components/custom-hooks/UseUser";
 import Header from "@/components/other/Header";
+import Loader from "@/components/other/Loader";
 import Navigation from "@/components/other/Navigation";
 import { redirect } from "next/navigation";
 import { useState } from "react";
@@ -161,13 +162,15 @@ export default function ProtectedLayout({
 
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
-  if (isPending) {
-    return (
-      <p className="my-2 text-center text-3xl tracking-wider">
-        Loading...
-      </p>
-    );
-  }
+  // if (isPending) {
+  //   return (
+  //     <p className="my-2 text-center text-3xl tracking-wider">
+  //       Loading...44444444444
+  //     </p>
+  //   );
+  // }
+
+if (isPending) return <Loader />;
 
   if (!isAuthenticated) {
     redirect("/login");
